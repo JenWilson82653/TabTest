@@ -12,5 +12,6 @@
             <TextBlock Text="{Binding SelectedTabIndex}"></TextBlock>
         </TextBlock>
         <Button Content="Change Tab" Command="{Binding ChangeTabCommand}" Width="150" Height="40"/>
+        <Button Content="Change Tab from Within Control" Width="200" Height="40" Click="Button_Click"/>
     </StackPanel>
 </UserControl>
