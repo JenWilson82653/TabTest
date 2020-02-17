@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:TabTest"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel Orientation="Vertical">
-        <TextBlock Margin="0,20,0,20" FontSize="12">
-            The goal of this code is to propagate a value from the ViewModel of a child control up to the ViewModel of the host control.
-            In this example we want to change 
+    <StackPanel Orientation="Vertical" Margin="10">
+        <TextBlock Margin="10" FontSize="12" TextWrapping="Wrap">
+            The goal of this code is to propagate a value from MyControlViewModel up to MainWindowViewModel. 
+            We want to do this when the button in the child control is clicked, and we want to demonstrate the effect
+            by toggling the select tab in the tab control.
         </TextBlock>
         
         <TextBlock Margin="0,20,0,20" FontSize="20">
