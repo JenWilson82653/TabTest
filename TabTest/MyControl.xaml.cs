@@ -20,7 +20,7 @@ namespace TabTest
     /// <summary>
     /// Interaction logic for MyControl.xaml
     /// </summary>
-    public partial class MyControl : UserControl /* controls don't implement INotifyPropertyChanged, use DependencyProperty instead */
+    public partial class MyControl : UserControl
     {
 
         public MyControlViewModel ViewModel
@@ -30,8 +30,8 @@ namespace TabTest
         }
 
         public static readonly DependencyProperty ViewModelProperty =
-            DependencyProperty.Register("ViewModel", typeof(MyControlViewModel), typeof(MyControl), new PropertyMetadata(default(MyControlViewModel)));
-        
+            DependencyProperty.Register("ViewModel", typeof(MyControlViewModel), typeof(MyControl), new PropertyMetadata(default(MyControlViewModel), ViewModelChanged));
+
 
         public int SelectedTabIndex
         {
@@ -40,20 +40,36 @@ namespace TabTest
         }
 
         public static readonly DependencyProperty SelectedTabIndexProperty =
-            DependencyProperty.Register("SelectedTabIndex", typeof(int), typeof(MyControl), new FrameworkPropertyMetadata(0) { BindsTwoWayByDefault=true });
+            DependencyProperty.Register("SelectedTabIndex", typeof(int), typeof(MyControl), new FrameworkPropertyMetadata(0, SelectedTabIndexChanged) { BindsTwoWayByDefault = true });
 
 
         public MyControl()
         {
             InitializeComponent();
-
-            // setting the Source to operate on the control, otherwise we'd operate on the DataContext
-            SetBinding(SelectedTabIndexProperty, new Binding("ViewModel.SelectedTabIndex") { Source = this });
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private static void ViewModelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            SetCurrentValue(SelectedTabIndexProperty, SelectedTabIndex == 0 ? 1 : 0);
+            MyControl thisControl = d as MyControl;
+
+            if (e.OldValue is INotifyPropertyChanged oldViewModel)
+                oldViewModel.PropertyChanged -= thisControl.ViewModel_PropertyChanged;
+            if (e.NewValue is INotifyPropertyChanged newViewModel)
+                newViewModel.PropertyChanged += thisControl.ViewModel_PropertyChanged;
+
+            thisControl.SetCurrentValue(SelectedTabIndexProperty, thisControl.ViewModel.SelectedTabIndex);
+        }
+
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            SetCurrentValue(SelectedTabIndexProperty, ViewModel.SelectedTabIndex);
+        }
+
+        private static void SelectedTabIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MyControl thisControl = d as MyControl;
+            if (thisControl.ViewModel != null)
+                thisControl.ViewModel.SelectedTabIndex = thisControl.SelectedTabIndex;
         }
     }
 }
