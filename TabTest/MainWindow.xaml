@@ -1,0 +1,35 @@
+﻿<Window x:Class="TabTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TabTest"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel Orientation="Vertical">
+        <TextBlock Margin="0,20,0,20" FontSize="12">
+            The goal of this code is to propagate a value from the ViewModel of a child control up to the ViewModel of the host control.
+            In this example we want to change 
+        </TextBlock>
+        
+        <TextBlock Margin="0,20,0,20" FontSize="20">
+            <Run >SelectedTabIndex as reported by MainWindowViewModel is: </Run>
+            <TextBlock Text="{Binding SelectedTabIndex}"></TextBlock>
+        </TextBlock>
+       
+
+        <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+            <TabItem Header="Tab 0">
+                <Border Background="LightBlue" Padding="20">
+                    <local:MyControl ViewModel="{Binding MyControlViewModel1}" SelectedTabIndex="{Binding SelectedTabIndex, Mode=TwoWay}" />
+                </Border>
+            </TabItem>
+
+            <TabItem Header="Tab 1" >
+                <Border Background="LightGreen" Padding="20">
+                    <local:MyControl ViewModel="{Binding MyControlViewModel2}" SelectedTabIndex="{Binding SelectedTabIndex, Mode=TwoWay}" />
+                </Border>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
+</Window>
